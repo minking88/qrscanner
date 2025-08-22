@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Quét mã QR</title>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #f4f6f8; padding: 20px; }
+    h2 { color: #333; }
+    #reader { width: 320px; margin: auto; }
+    #result { margin-top: 20px; font-size: 18px; color: green; }
+  </style>
+</head>
+<body>
+  <h2>📷 Quét mã QR</h2>
+  <div id="reader"></div>
+  <div id="result">Đang chờ mã QR...</div>
+
+  <script>
+    const webAppURL = "https://script.google.com/macros/s/AKfycbzLYtwSX7MWGwHhmuOafj3SIE4Ybjk8cfENuDleGAFOli0iDXlqFqRzYuV7UFlnvi13iQ/exec"; // <-- Dán link /exec của Apps Script
+
+    function onScanSuccess(decodedText) {
+      document.getElementById("result").innerText = `✅ Đã quét: ${decodedText}`;
+      html5QrcodeScanner.clear();
+      // Chuyển sang Web App và gửi dữ liệu
+      window.location.href = `${webAppURL}?code=${encodeURIComponent(decodedText)}`;
+    }
+
+    function onScanFailure(err) { /* Bỏ qua lỗi nhỏ */ }
+
+    // Bắt đầu quét
+    let html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 }, false);
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+  </script>
+</body>
+</html>
